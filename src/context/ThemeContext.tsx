@@ -3,6 +3,7 @@ import { ThemeProvider as StyledComponentsThemeContextProvider } from "styled-co
 
 const theme = {
   orange: "#FDA214",
+  orangeHover: "#FFB84A",
   softBlue: "#BCCED9",
   darkGrey: "#304859",
   black: "#152938",
