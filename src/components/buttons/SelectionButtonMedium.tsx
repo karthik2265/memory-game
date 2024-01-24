@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledSelectionButtonMedium = styled.button<{ $isIdle: boolean }>`
-  width: auto;
+  width: 16rem;
   height: 3.25rem;
   display: flex;
   justify-content: center;
@@ -16,16 +16,21 @@ const StyledSelectionButtonMedium = styled.button<{ $isIdle: boolean }>`
   border-radius: 1.625rem;
   border: none;
   outline: none;
-  padding: 0 5rem;
   background: ${(props) => (props.$isIdle ? props.theme.softBlue : props.theme.darkGrey)};
 
   &:hover {
-    background: ${(props) => (props.$isIdle ? "" : props.theme.blue)};
-    cursor: ${(props) => (props.$isIdle ? "" : "pointer")};
+    background: ${(props) => (props.$isIdle ? props.theme.blue : "")};
+    cursor: ${(props) => (props.$isIdle ? "pointer" : "")};
   }
 
   &:active {
-    scale: ${(props) => (props.$isIdle ? 1 : 0.97)};
+    scale: ${(props) => (props.$isIdle ? 0.97 : 1)};
+  }
+
+  @media (max-width: 650px) {
+    width: 8.375rem;
+    height: 2.5rem;
+    font-size: 1rem;
   }
 `;
 const SelectionButtonMedium = ({ children, isIdle }: { children: ReactNode; isIdle: boolean }) => {

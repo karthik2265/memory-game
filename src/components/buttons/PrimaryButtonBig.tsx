@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledPrimaryButtonBig = styled.button`
-  width: auto;
+  width: 33.8125rem;
   height: 4.375rem;
   display: flex;
   justify-content: center;
@@ -16,7 +16,6 @@ const StyledPrimaryButtonBig = styled.button`
   border-radius: 2.1875rem;
   border: none;
   outline: none;
-  padding: 0 10rem;
   background: ${(props) => props.theme.orange};
 
   &:hover {
@@ -26,6 +25,12 @@ const StyledPrimaryButtonBig = styled.button`
 
   &:active {
     scale: 0.97;
+  }
+
+  @media (max-width: 650px) {
+    width: max(17.4375rem, 100%);
+    height: 3rem;
+    font-size: 1.125rem;
   }
 `;
 const PrimaryButtonBig = ({ children }: { children: ReactNode }) => {

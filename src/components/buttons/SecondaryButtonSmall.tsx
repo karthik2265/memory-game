@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledSecondaryButtonSmall = styled.button`
-  width: auto;
+  width: 7.9375rem;
   height: 3.25rem;
   display: flex;
   justify-content: center;
@@ -16,7 +16,6 @@ const StyledSecondaryButtonSmall = styled.button`
   border-radius: 1.625rem;
   border: none;
   outline: none;
-  padding: 0 1.75rem;
   background: #dfe7ec;
 
   &:hover {
@@ -27,6 +26,12 @@ const StyledSecondaryButtonSmall = styled.button`
 
   &:active {
     scale: 0.97;
+  }
+
+  @media (max-width: 650px) {
+    width: 3.875rem;
+    height: 2.5rem;
+    font-size: 1rem;
   }
 `;
 
