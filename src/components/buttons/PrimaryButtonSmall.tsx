@@ -2,8 +2,9 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledPrimaryButtonSmall = styled.button`
-  width: 7.9375rem;
-  height: 3.25rem;
+  min-width: 7.9375rem;
+  min-height: 3.25rem;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,8 +29,8 @@ const StyledPrimaryButtonSmall = styled.button`
   }
 
   @media (max-width: 650px) {
-    width: 3.875rem;
-    height: 2.5rem;
+    min-width: 3.875rem;
+    min-height: 2.5rem;
     font-size: 1rem;
   }
 `;

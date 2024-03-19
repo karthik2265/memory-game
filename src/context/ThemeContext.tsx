@@ -5,6 +5,7 @@ const theme = {
   orange: "#FDA214",
   orangeHover: "#FFB84A",
   softBlue: "#BCCED9",
+  iceBlue: "#DFE7EC",
   darkGrey: "#304859",
   black: "#152938",
   softWhite: "#F2F2F2",
