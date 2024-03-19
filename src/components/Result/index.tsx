@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import H1 from "../typography/H1";
 import { ThemeContext } from "../../context/ThemeContext";
 import BodyText from "../typography/BodyText";
@@ -42,9 +42,9 @@ const StyledActionButton = styled.div`
   }
 `;
 
-const StyledInfoBox = styled.div<{ backgroundColor: string }>`
+const StyledInfoBox = styled.div<{ $backgroundColor: string }>`
   width: 33.87rem;
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.$backgroundColor};
   border-radius: 0.625rem;
   padding: 1.5rem;
   display: flex;
@@ -75,7 +75,7 @@ const Result = ({ players, restart }: ResultProps) => {
         ? players.map((player, idx) => {
             return (
               <div key={idx} style={{ marginTop: idx === 0 ? 0 : "1rem" }}>
-                <StyledInfoBox backgroundColor={player.isWinner ? theme.black : theme.iceBlue}>
+                <StyledInfoBox $backgroundColor={player.isWinner ? theme.black : theme.iceBlue}>
                   <BodyText color={player.isWinner ? theme.white : theme.grey}>{`${player.name} ${
                     player.isWinner ? "(Winner!)" : ""
                   }`}</BodyText>
@@ -88,11 +88,11 @@ const Result = ({ players, restart }: ResultProps) => {
             return (
               <div key={idx} style={{ marginTop: idx === 0 ? 0 : "1rem" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  <StyledInfoBox backgroundColor={theme.iceBlue}>
+                  <StyledInfoBox $backgroundColor={theme.iceBlue}>
                     <BodyText color={theme.grey}>Time Elapsed</BodyText>
                     <H2 color={theme.black}>{player.time}</H2>
                   </StyledInfoBox>
-                  <StyledInfoBox backgroundColor={theme.iceBlue}>
+                  <StyledInfoBox $backgroundColor={theme.iceBlue}>
                     <BodyText color={theme.grey}>Moves Taken</BodyText>
                     <H2 color={theme.black}>{player.movesTaken}</H2>
                   </StyledInfoBox>

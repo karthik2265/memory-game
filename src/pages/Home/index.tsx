@@ -5,7 +5,7 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { useContext, useReducer } from "react";
 import SelectionButtonMedium from "../../components/buttons/SelectionButtonMedium";
 import SelectionButtonSmall from "../../components/buttons/SelectionButtonSmall";
-import { GameGridSize, GameThemeOptions, NumberOfPlayersInGame } from "../../constants";
+import {  GameThemeOptions } from "../../constants";
 import { useNavigate } from "react-router-dom";
 
 const StyledHomePage = styled.div`
@@ -41,14 +41,14 @@ const StyledMenu = styled.div`
 
 const defaultOptions: SelectedOptions = {
   theme: GameThemeOptions.Numbers,
-  players: NumberOfPlayersInGame.One,
-  size: GameGridSize.FourByFour,
+  players: 1,
+  size: 4,
 };
 
 type SelectedOptions = {
   theme: GameThemeOptions;
-  players: NumberOfPlayersInGame;
-  size: GameGridSize;
+  players: number;
+  size: number;
 };
 
 type Action =
@@ -56,8 +56,8 @@ type Action =
       type: "UPDATE_THEME";
       payload: GameThemeOptions;
     }
-  | { type: "UPDATE_NUMBER_OF_PLAYERS"; payload: NumberOfPlayersInGame }
-  | { type: "UPDATE_GRID_SIZE"; payload: GameGridSize };
+  | { type: "UPDATE_NUMBER_OF_PLAYERS"; payload: number }
+  | { type: "UPDATE_GRID_SIZE"; payload: number };
 
 function reducer(state: SelectedOptions, action: Action) {
   switch (action.type) {
@@ -101,40 +101,28 @@ const HomePage = () => {
         <div style={{ display: "flex", gap: "1.85rem", flexDirection: "column" }}>
           <H3 color={theme.grey}>Numbers of Players</H3>
           <div style={{ display: "flex", gap: "1.3rem", justifyContent: "space-between" }}>
-            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: NumberOfPlayersInGame.One })}>
-              <SelectionButtonSmall isIdle={!(selectedOptions.players === NumberOfPlayersInGame.One)}>
-                1
-              </SelectionButtonSmall>
+            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: 1 })}>
+              <SelectionButtonSmall isIdle={!(selectedOptions.players === 1)}>1</SelectionButtonSmall>
             </div>
-            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: NumberOfPlayersInGame.Two })}>
-              <SelectionButtonSmall isIdle={!(selectedOptions.players === NumberOfPlayersInGame.Two)}>
-                2
-              </SelectionButtonSmall>
+            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: 2 })}>
+              <SelectionButtonSmall isIdle={!(selectedOptions.players === 2)}>2</SelectionButtonSmall>
             </div>
-            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: NumberOfPlayersInGame.Three })}>
-              <SelectionButtonSmall isIdle={!(selectedOptions.players === NumberOfPlayersInGame.Three)}>
-                3
-              </SelectionButtonSmall>
+            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: 3 })}>
+              <SelectionButtonSmall isIdle={!(selectedOptions.players === 3)}>3</SelectionButtonSmall>
             </div>
-            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: NumberOfPlayersInGame.Four })}>
-              <SelectionButtonSmall isIdle={!(selectedOptions.players === NumberOfPlayersInGame.Four)}>
-                4
-              </SelectionButtonSmall>
+            <div onClick={() => dispatch({ type: "UPDATE_NUMBER_OF_PLAYERS", payload: 4 })}>
+              <SelectionButtonSmall isIdle={!(selectedOptions.players === 4)}>4</SelectionButtonSmall>
             </div>
           </div>
         </div>
         <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
           <H3 color={theme.grey}>Grid Size</H3>
           <div style={{ display: "flex", gap: "1.85rem", justifyContent: "space-between" }}>
-            <div onClick={() => dispatch({ type: "UPDATE_GRID_SIZE", payload: GameGridSize.FourByFour })}>
-              <SelectionButtonMedium isIdle={!(selectedOptions.size === GameGridSize.FourByFour)}>
-                4x4
-              </SelectionButtonMedium>
+            <div onClick={() => dispatch({ type: "UPDATE_GRID_SIZE", payload: 4 })}>
+              <SelectionButtonMedium isIdle={!(selectedOptions.size === 4)}>4x4</SelectionButtonMedium>
             </div>
-            <div onClick={() => dispatch({ type: "UPDATE_GRID_SIZE", payload: GameGridSize.SixBySix })}>
-              <SelectionButtonMedium isIdle={!(selectedOptions.size === GameGridSize.SixBySix)}>
-                6x6
-              </SelectionButtonMedium>
+            <div onClick={() => dispatch({ type: "UPDATE_GRID_SIZE", payload: 6 })}>
+              <SelectionButtonMedium isIdle={!(selectedOptions.size === 6)}>6x6</SelectionButtonMedium>
             </div>
           </div>
         </div>
