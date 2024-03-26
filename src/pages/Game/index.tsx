@@ -10,13 +10,17 @@ import PrimaryButtonSmall from "../../components/buttons/PrimaryButtonSmall";
 import SecondaryButtonSmall from "../../components/buttons/SecondaryButtonSmall";
 import styled from "styled-components";
 import PauseMenu from "../../components/PauseMenu";
+import BodyText from "../../components/typography/BodyText";
+import H2 from "../../components/typography/H2";
 
 const StyledPageWrapper = styled.div`
   padding: 2rem 0;
   display: flex;
+  gap: 5rem;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  min-height: 100vh;
 
   @media (max-width: 768px) {
     padding: 1.25rem 0;
@@ -34,7 +38,7 @@ const StyledActionButton = styled.div<{ $hideOnSmallScreen: boolean }>`
 
 const StyledHeader = styled.div`
   max-width: 1110px;
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,6 +50,79 @@ const StyledHeader = styled.div`
   @media (max-width: 650px) {
     width: 100%;
     padding: 0 1rem;
+  }
+`;
+
+const StyledGame = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const StyledRow = styled.div`
+  display: flex;
+  gap: 1.5rem;
+`;
+
+const StyledCell = styled.div<{ $isSelected: boolean; $isMatched: boolean; $size: number }>`
+  border-radius: 50%;
+  background-color: ${(props) =>
+    props.$isMatched ? props.theme.softBlue : props.$isSelected ? props.theme.orange : (props) => props.theme.darkGrey};
+  padding: 1rem;
+  width: ${(props) => (props.$size == 4 ? "7.375rem" : "5.125rem")};
+  height: ${(props) => (props.$size == 4 ? "7.375rem" : "5.125rem")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 650px) {
+    width: ${(props) => (props.$size == 4 ? "4.53rem" : "2.93rem")};
+    height: ${(props) => (props.$size == 4 ? "4.53rem" : "2.93rem")};
+  }
+
+  &:hover {
+    cursor: ${(props) => (!(props.$isMatched || props.$isSelected) ? "pointer" : "")};
+    background-color: ${(props) => (!(props.$isMatched || props.$isSelected) ? props.theme.softBlue : "")};
+  }
+
+  &:active {
+    scale: 0.95;
+  }
+`;
+
+const StyledPlayerInfo = styled.div<{ $isActive: boolean }>`
+  background-color: ${(props) => (props.$isActive ? props.theme.orange : props.theme.iceBlue)};
+  border-radius: 0.625rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem;
+  width: 15.93rem;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%; /* Position the triangle in the middle horizontally */
+    transform: translateX(-50%);
+    border-left: 20px solid transparent; /* Adjust size of the triangle */
+    border-right: 20px solid transparent; /* Adjust size of the triangle */
+    border-bottom: 20px solid ${(props) => (props.$isActive ? props.theme.orange : "transparent")}; /* Adjust color to match rectangle */
+  }
+
+  @media (max-width: 900px) {
+    width: 10.25rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 650px) {
+    width: 4rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -109,23 +186,39 @@ const GamePage = () => {
           </StyledActionButton>
         </div>
       </StyledHeader>
-      {cells.map((row, i) => {
-        return row.map((cell, j) => {
-          const value = cell.value;
-          return <div key={`${i}-${j}`}>{renderValue(value)}</div>;
-        });
-      })}
-      <div></div>
+      <StyledGame>
+        {cells.map((row, i) => {
+          return (
+            <StyledRow key={i}>
+              {row.map((cell, j) => {
+                const value = cell.value;
+                return (
+                  <StyledCell $size={size} $isMatched={cell.isMatched} $isSelected={cell.isSelected} key={`${i}-${j}`}>
+                    {(cell.isMatched || cell.isSelected) && renderValue(value)}
+                  </StyledCell>
+                );
+              })}
+            </StyledRow>
+          );
+        })}
+      </StyledGame>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        {players.map((player, idx) => {
+          return (
+            <StyledPlayerInfo $isActive={idx === currentActivePlayer}>
+              <BodyText color={player.isActive ? theme.white : theme.grey}>{player.name}</BodyText>
+              <H2 color={player.isActive ? theme.white : theme.darkGrey}>{player.pairsMatched}</H2>
+            </StyledPlayerInfo>
+          );
+        })}
+      </div>
       <Modal isOpen={isResultModalOpen} setIsOpen={setIsResultModalOpen}>
         <Result
           restart={() => {
             resetGameToInitialState();
             setIsResultModalOpen(false);
           }}
-          players={[
-            { name: "karthik", pairsMatched: 34, time: "1:54", movesTaken: 23, isWinner: true },
-            { name: "karthik", pairsMatched: 34, time: "1:54", movesTaken: 23, isWinner: false },
-          ]}
+          players={players}
         />
       </Modal>
       <Modal isOpen={isPauseMenuOpen} setIsOpen={setIsPauseMenuOpen}>
@@ -168,7 +261,7 @@ function getCells(size: number, theme: GameThemeOptions) {
 
 function getPlayers(count: number) {
   const player = {
-    name: "Player",
+    name: "",
     isActive: false,
     time: 0,
     pairsMatched: 0,
@@ -177,7 +270,7 @@ function getPlayers(count: number) {
   };
   const players: Player[] = [];
   for (let i = 0; i < count; i++) {
-    players.push({ ...player, name: `${player.name} ${i + 1}` });
+    players.push({ ...player, name: getPlayerName(i), isActive: i === 0 });
   }
   return players;
 }
@@ -186,9 +279,22 @@ function getRandomInRange(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function getPlayerName(idx: number) {
+  const isSmallScreen = window.matchMedia("(max-width: 650px)").matches;
+  return isSmallScreen ? `P${idx + 1}` : `Player ${idx + 1}`;
+}
+
+const StyledCellValue = styled.div`
+  font-size: 2.75rem;
+
+  @media (max-width: 650px) {
+    width: 1.5rem;
+  }
+`;
+
 const renderValue = (value: number | (() => JSX.Element)) => {
   if (typeof value === "number") {
-    return <span>{value}</span>;
+    return <StyledCellValue>{value}</StyledCellValue>;
   } else {
     return value(); // Assuming it's a function returning JSX
   }

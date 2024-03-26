@@ -9,13 +9,13 @@ import H2 from "../typography/H2";
 import { useNavigate } from "react-router-dom";
 
 type ResultProps = {
-  players: { name: string; pairsMatched: number; time: string; movesTaken: number; isWinner: boolean }[];
+  players: { name: string; pairsMatched: number; time: number; movesTaken: number; isWinner: boolean }[];
   restart: () => void;
 };
 
 const StyledResult = styled.div`
   background-color: ${(props) => props.theme.white};
-  padding: 2rem 1.25rem;
+  padding: 1.5rem 1.25rem;
   border-radius: 1rem;
   display: grid;
   place-items: center;
@@ -46,7 +46,7 @@ const StyledInfoBox = styled.div<{ $backgroundColor: string }>`
   width: 33.87rem;
   background-color: ${(props) => props.$backgroundColor};
   border-radius: 0.625rem;
-  padding: 1.5rem;
+  padding: 0.75rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,7 +90,7 @@ const Result = ({ players, restart }: ResultProps) => {
                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                   <StyledInfoBox $backgroundColor={theme.iceBlue}>
                     <BodyText color={theme.grey}>Time Elapsed</BodyText>
-                    <H2 color={theme.black}>{player.time}</H2>
+                    <H2 color={theme.black}>{formatTime(player.time)}</H2>
                   </StyledInfoBox>
                   <StyledInfoBox $backgroundColor={theme.iceBlue}>
                     <BodyText color={theme.grey}>Moves Taken</BodyText>
@@ -130,6 +130,12 @@ function getSubTitleText(players: ResultProps["players"]) {
     return "Game over! Here are the results…";
   }
   return "Game over! Here’s how you got on…";
+}
+
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 }
 
 // function findWinners(players: ResultProps["players"]) {
