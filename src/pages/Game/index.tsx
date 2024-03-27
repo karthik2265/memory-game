@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { GameThemeOptions, Icons, Numbers } from "../../constants";
 import Modal from "../../components/Modal";
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import Result from "../../components/Result";
 import { Cell, Player } from "../../types";
 import H1 from "../../components/typography/H1";
