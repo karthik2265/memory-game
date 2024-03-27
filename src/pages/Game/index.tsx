@@ -82,7 +82,7 @@ const StyledCell = styled.div<{ $isSelected: boolean; $isMatched: boolean; $size
 
   &:hover {
     cursor: ${(props) => (!(props.$isMatched || props.$isSelected) ? "pointer" : "")};
-    background-color: ${(props) => (!(props.$isMatched || props.$isSelected) ? props.theme.softBlue : "")};
+    background-color: ${(props) => (!(props.$isMatched || props.$isSelected) ? props.theme.blue : "")};
   }
 
   &:active {
@@ -168,7 +168,68 @@ const GamePage = () => {
     setCurrentActivePlayer(0);
   }
 
-  function cellClickHandler(cell: Cell) {}
+  function cellClickHandler(cell: Cell) {
+    const cell1 = cell;
+    let cell2: Cell | null = null;
+    cells.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.isSelected) {
+          cell2 = cell;
+        }
+      });
+    });
+    if (cell2 !== null) {
+      setCells((prev) => {
+        const newCells = [];
+        for (let i = 0; i < prev.length; i++) {
+          newCells.push([...prev[i]]);
+        }
+        // update cell state
+        newCells[cell!.x][cell!.y].isSelected = true;
+        return newCells;
+      });
+      setTimeout(() => {
+        evaluateSelectedCellsMatch(cell1, cell2!);
+        setCurrentActivePlayer((prev) => (prev + 1) % playersCount);
+      }, 800);
+    } else {
+      setCells((prev) => {
+        const newCells = [];
+        for (let i = 0; i < prev.length; i++) {
+          newCells.push([...prev[i]]);
+        }
+        // update cell state
+        newCells[cell.x][cell.y].isSelected = true;
+        return newCells;
+      });
+    }
+  }
+
+  function evaluateSelectedCellsMatch(cell1: Cell, cell2: Cell) {
+    const isMatched = cell1.value === cell2.value;
+    setCells((prev) => {
+      const newCells = [];
+      for (let i = 0; i < prev.length; i++) {
+        newCells.push([...prev[i]]);
+      }
+      // update cell states
+      // cell1
+      newCells[cell1.x][cell1.y].isSelected = false;
+      newCells[cell1.x][cell1.y].isMatched = isMatched;
+      // cell2
+      newCells[cell2.x][cell2.y].isSelected = false;
+      newCells[cell2.x][cell2.y].isMatched = isMatched;
+      return newCells;
+    });
+    setPlayers((prev) => {
+      const newState = prev.map((x) => ({ ...x }));
+      if (isMatched) {
+        newState[currentActivePlayer].pairsMatched += 1;
+      }
+      newState[currentActivePlayer].movesTaken += 1;
+      return newState;
+    });
+  }
 
   return (
     <StyledPageWrapper>
@@ -193,7 +254,13 @@ const GamePage = () => {
               {row.map((cell, j) => {
                 const value = cell.value;
                 return (
-                  <StyledCell $size={size} $isMatched={cell.isMatched} $isSelected={cell.isSelected} key={`${i}-${j}`}>
+                  <StyledCell
+                    onClick={() => cellClickHandler(cell)}
+                    $size={size}
+                    $isMatched={cell.isMatched}
+                    $isSelected={cell.isSelected}
+                    key={`${i}-${j}`}
+                  >
                     {(cell.isMatched || cell.isSelected) && renderValue(value)}
                   </StyledCell>
                 );
@@ -203,14 +270,27 @@ const GamePage = () => {
         })}
       </StyledGame>
       <div style={{ display: "flex", gap: "1rem" }}>
-        {players.map((player, idx) => {
-          return (
-            <StyledPlayerInfo $isActive={idx === currentActivePlayer}>
-              <BodyText color={player.isActive ? theme.white : theme.grey}>{player.name}</BodyText>
-              <H2 color={player.isActive ? theme.white : theme.darkGrey}>{player.pairsMatched}</H2>
+        {players.length > 1 ? (
+          players.map((player, idx) => {
+            return (
+              <StyledPlayerInfo key={idx} $isActive={idx === currentActivePlayer}>
+                <BodyText color={currentActivePlayer === idx ? theme.white : theme.grey}>{player.name}</BodyText>
+                <H2 color={currentActivePlayer === idx ? theme.white : theme.darkGrey}>{player.pairsMatched}</H2>
+              </StyledPlayerInfo>
+            );
+          })
+        ) : (
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            <StyledPlayerInfo $isActive={false}>
+              <BodyText color={theme.grey}>Time</BodyText>
+              <H2 color={theme.darkGrey}>{players[0].time}</H2>
             </StyledPlayerInfo>
-          );
-        })}
+            <StyledPlayerInfo $isActive={false}>
+              <BodyText color={theme.grey}>Moves</BodyText>
+              <H2 color={theme.darkGrey}>{players[0].movesTaken}</H2>
+            </StyledPlayerInfo>
+          </div>
+        )}
       </div>
       <Modal isOpen={isResultModalOpen} setIsOpen={setIsResultModalOpen}>
         <Result
@@ -286,7 +366,7 @@ function getPlayerName(idx: number) {
 
 const StyledCellValue = styled.div`
   font-size: 2.75rem;
-
+  color: ${(props) => props.theme.white};
   @media (max-width: 650px) {
     width: 1.5rem;
   }
