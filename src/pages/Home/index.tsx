@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 const StyledHomePage = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background: ${(props) => props.theme.black};
   display: grid;
   place-items: center;

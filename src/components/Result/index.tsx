@@ -7,6 +7,7 @@ import SecondaryButtonSmall from "../buttons/SecondaryButtonSmall";
 import styled from "styled-components";
 import H2 from "../typography/H2";
 import { useNavigate } from "react-router-dom";
+import { formatTime } from "../../util";
 
 type ResultProps = {
   players: { name: string; pairsMatched: number; time: number; movesTaken: number; isWinner: boolean }[];
@@ -130,12 +131,6 @@ function getSubTitleText(players: ResultProps["players"]) {
     return "Game over! Here are the results…";
   }
   return "Game over! Here’s how you got on…";
-}
-
-function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 }
 
 // function findWinners(players: ResultProps["players"]) {

@@ -12,6 +12,7 @@ import styled from "styled-components";
 import PauseMenu from "../../components/PauseMenu";
 import BodyText from "../../components/typography/BodyText";
 import H2 from "../../components/typography/H2";
+import { formatTime } from "../../util";
 
 const StyledPageWrapper = styled.div`
   padding: 2rem 0;
@@ -283,7 +284,7 @@ const GamePage = () => {
           <div style={{ display: "flex", gap: "1.5rem" }}>
             <StyledPlayerInfo $isActive={false}>
               <BodyText color={theme.grey}>Time</BodyText>
-              <H2 color={theme.darkGrey}>{players[0].time}</H2>
+              <H2 color={theme.darkGrey}>{formatTime(players[0].time)}</H2>
             </StyledPlayerInfo>
             <StyledPlayerInfo $isActive={false}>
               <BodyText color={theme.grey}>Moves</BodyText>
