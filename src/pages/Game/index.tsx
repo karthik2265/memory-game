@@ -75,6 +75,7 @@ const StyledCell = styled.div<{ $isSelected: boolean; $isMatched: boolean; $size
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s ease;
 
   @media (max-width: 650px) {
     width: ${(props) => (props.$size == 4 ? "4.53rem" : "2.93rem")};
@@ -100,6 +101,7 @@ const StyledPlayerInfo = styled.div<{ $isActive: boolean }>`
   padding: 1rem 1rem;
   width: 15.93rem;
   position: relative;
+  transition: all 0.3s ease;
 
   &::before {
     content: "";
@@ -136,7 +138,7 @@ const GamePage = () => {
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   // state
-  const [isResultModalOpen, setIsResultModalOpen] = useState(true);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [isPauseMenuOpen, setIsPauseMenuOpen] = useState(false);
   // game state
   const [cells, setCells] = useState(() => {
@@ -146,11 +148,10 @@ const GamePage = () => {
     return getPlayers(playersCount);
   });
   const [currentActivePlayer, setCurrentActivePlayer] = useState(0);
-
   // time
   useEffect(() => {
     const timer = setInterval(() => {
-      if (!isPauseMenuOpen) {
+      if (!isPauseMenuOpen && !isResultModalOpen) {
         setPlayers((prev) => {
           const next = [...prev];
           next[currentActivePlayer].time += 1;
@@ -160,7 +161,7 @@ const GamePage = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentActivePlayer, isPauseMenuOpen]);
+  }, [currentActivePlayer, isPauseMenuOpen, isResultModalOpen]);
 
   // handler functions
   function resetGameToInitialState() {
@@ -220,8 +221,18 @@ const GamePage = () => {
       // cell2
       newCells[cell2.x][cell2.y].isSelected = false;
       newCells[cell2.x][cell2.y].isMatched = isMatched;
+      let matchedCells = 0;
+      newCells.forEach((row) => {
+        row.forEach((cell) => {
+          if (cell.isMatched) matchedCells++;
+        });
+      });
+      if (matchedCells === size * size) {
+        setIsResultModalOpen(true);
+      }
       return newCells;
     });
+
     setPlayers((prev) => {
       const newState = prev.map((x) => ({ ...x }));
       if (isMatched) {
