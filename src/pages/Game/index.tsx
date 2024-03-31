@@ -88,7 +88,7 @@ const StyledCell = styled.div<{ $isSelected: boolean; $isMatched: boolean; $size
   }
 
   &:active {
-    scale: 0.95;
+    scale: ${(props) => (!props.$isMatched && !props.$isSelected ? 0.95 : 1)};
   }
 `;
 
@@ -182,7 +182,7 @@ const GamePage = () => {
     });
     if (cell2 !== null) {
       setCells((prev) => {
-        const newCells = [];
+        const newCells: Cell[][] = [];
         for (let i = 0; i < prev.length; i++) {
           newCells.push([...prev[i]]);
         }
@@ -196,7 +196,7 @@ const GamePage = () => {
       }, 800);
     } else {
       setCells((prev) => {
-        const newCells = [];
+        const newCells: Cell[][] = [];
         for (let i = 0; i < prev.length; i++) {
           newCells.push([...prev[i]]);
         }
@@ -267,7 +267,7 @@ const GamePage = () => {
                 const value = cell.value;
                 return (
                   <StyledCell
-                    onClick={() => cellClickHandler(cell)}
+                    onClick={() => (!cell.isSelected && !cell.isMatched ? cellClickHandler(cell) : null)}
                     $size={size}
                     $isMatched={cell.isMatched}
                     $isSelected={cell.isSelected}

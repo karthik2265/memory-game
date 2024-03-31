@@ -8,9 +8,10 @@ import styled from "styled-components";
 import H2 from "../typography/H2";
 import { useNavigate } from "react-router-dom";
 import { formatTime } from "../../util";
+import { Player } from "../../types";
 
 type ResultProps = {
-  players: { name: string; pairsMatched: number; time: number; movesTaken: number; isWinner: boolean }[];
+  players: Player[];
   restart: () => void;
 };
 
@@ -58,10 +59,17 @@ const StyledInfoBox = styled.div<{ $backgroundColor: string }>`
   }
 `;
 
+function findWinners(players: Player[]) {
+  players.sort((a, b) => b.pairsMatched - a.pairsMatched);
+  const highestScore = players[0].pairsMatched;
+  return players.map((x) => ({ ...x, isWinner: x.pairsMatched === highestScore }));
+}
+
 const Result = ({ players, restart }: ResultProps) => {
   const title = getTitleText(players);
   const subTitle = getSubTitleText(players);
   const theme = useContext(ThemeContext);
+  players = findWinners(players);
   const navigate = useNavigate();
 
   return (
