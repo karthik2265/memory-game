@@ -305,13 +305,15 @@ const GamePage = () => {
         )}
       </div>
       <Modal isOpen={isResultModalOpen} setIsOpen={setIsResultModalOpen}>
-        <Result
-          restart={() => {
-            resetGameToInitialState();
-            setIsResultModalOpen(false);
-          }}
-          players={players}
-        />
+        {isResultModalOpen && (
+          <Result
+            restart={() => {
+              resetGameToInitialState();
+              setIsResultModalOpen(false);
+            }}
+            players={players}
+          />
+        )}
       </Modal>
       <Modal isOpen={isPauseMenuOpen} setIsOpen={setIsPauseMenuOpen}>
         <PauseMenu
